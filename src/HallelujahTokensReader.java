@@ -31,7 +31,8 @@ public class HallelujahTokensReader {
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
 
-                FileNameExtensionFilter filter = new FileNameExtensionFilter("Arquivos de código", "txt", "java");
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("Arquivos de código", "cruz", "txt",
+                        "java");
                 fileChooser.setFileFilter(filter);
 
                 int result = fileChooser.showOpenDialog(frame);

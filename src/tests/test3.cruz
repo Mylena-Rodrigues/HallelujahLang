@@ -1,33 +1,33 @@
-feFaz Printable estende Teste { 
+feFaz Printable {
   printMessage();
 }
- 
-igreja Message implementa Printable { 
-  qualquer obraDoSenhor printMessage(){ 
-    pregue("Mensagem impressa!"); 
-  } 
-} 
 
-igreja Main estende{
+igreja Message implementa Printable {
+  qualquer obraDoSenhor printMessage(){
+    pregue("Mensagem impressa!");
+  }
+}
+
+igreja Main estende Teste {
   qualquer mensagem = nova Message();
   mensagem.printMessage();
-  
-  asas aritmetica = nova Arithmetic(); 
-  aritmetica.add(2,2); 
+
+  asas aritmetica = nova Arithmetic();
+  aritmetica.add(2,2);
   aritmetica.subtract(2,2);
 }
 
-feFaz Calculator { 
-  asas add(a, b); 
-  asas subtract(a, b); 
-} 
+feFaz Calculator {
+  asas add(a, b);
+  asas subtract(a, b);
+}
 
-igreja Arithmetic implementa Calculator { 
-  asas obraDoSenhor add(asas a, asas b) { 
-    amem a + b; 
-  } 
- 
- asas obraDoSenhor subtract(asas a, asas b) { 
-    amem a - b; 
- } 
-} 
+igreja Arithmetic implementa Calculator {
+  asas obraDoSenhor add(asas a, asas b) {
+    amem a + b;
+  }
+
+ asas obraDoSenhor subtract(asas a, asas b) {
+    amem a - b;
+ }
+}

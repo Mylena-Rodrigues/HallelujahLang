@@ -99,7 +99,7 @@ class_body: (
 		| method_declaration
 		| class_instance
 		| class_method_call SEMICOLON
-		| this_class_method_call
+		| this_class_method_call SEMICOLON
 		| constructor_declaration
 		| LINE_COMMENT
 		| MULTILINE_COMMENT
@@ -108,7 +108,7 @@ class_body: (
 class_instance: data_type ID ASSIGN NEW ID LPAREN arguments RPAREN SEMICOLON;
 
 field_declaration:
-	data_type ID (SEMICOLON | ASSIGN expression SEMICOLON);
+	data_type ID (SEMICOLON | ASSIGN expression (LBRACKET expression RBRACKET)? SEMICOLON);
 
 method_declaration:
 	data_type METHOD ID LPAREN parameters RPAREN block;
@@ -132,7 +132,7 @@ statement:
 	| array_access
 	| array_declaration
 	| class_instance
-	| this_class_method_call
+	| this_class_method_call SEMICOLON
 	| LINE_COMMENT
 	| MULTILINE_COMMENT
 	| expression SEMICOLON;
@@ -142,7 +142,7 @@ assignment_statement:
 	| data_type ID ASSIGN expression SEMICOLON
 	| array_initializer;
 
-if_statement: IF LPAREN expression RPAREN block (elseif_statement)* (ELSE block)?;
+if_statement: IF LPAREN expression RPAREN block (elseif_statement)*? (ELSE block)?;
 
 elseif_statement: ELSEIF LPAREN expression RPAREN block;
 
@@ -166,7 +166,7 @@ input_statement: INPUT LPAREN ID RPAREN SEMICOLON;
 interface_declaration:
 	INTERFACE ID LBRACE interface_body RBRACE;
 
-interface_body: (method_declaration | method_call_statement | (data_type method_call_statement))*;
+interface_body: (method_declaration | method_call_statement SEMICOLON | (data_type method_call_statement SEMICOLON))*;
 
 arguments: (expression (COMMA expression)*)?;
 

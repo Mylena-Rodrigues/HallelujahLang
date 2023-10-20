@@ -5,18 +5,19 @@ igreja Person {
     gloria[3][3] fruits = [["apple", "banana", "cherry"], ["orange", "grape", "lemon"]]; 
     gloria[] colors = ["red", "green", "blue"]; 
     gloria[] firstColor = colors[0]; 
-    pes x = numbers[2]; 
-    gloria y = fruits[0]; 
-    consciencia isStudent = anjo; 
+    consciencia isStudent;
+    pes x = numbers[2];
+    gloria y = fruits[0];
 
-    gloria obraDoSenhor print(name, x, y) { 
-        seDeusQuiser (x > y) { 
-            pregue("x é maior que y"); 
-        } seDeusNaoQuiserTente (x < y) { 
-            pregue("x é menor que y"); 
-        } seDeusNaoQuiserEntao { 
-            pregue("x é igual a y"); 
-        } 
+
+    gloria obraDoSenhor print(gloria name, pes x, pes y) {
+        seDeusQuiser (x > y) {
+            pregue("x é maior que y");
+        } seDeusNaoQuiserTente (x < y) {
+            pregue("x é menor que y");
+        } seDeusNaoQuiserEntao {
+            pregue("x é igual a y");
+        }
 
         amem "Hello, " + name + "!"; 
     } 

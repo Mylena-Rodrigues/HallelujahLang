@@ -12,7 +12,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             String[] fileNames = { "tests/test0" + EXTENSION, "tests/test1" + EXTENSION,
-                    "tests/test2" + EXTENSION, "tests/test3" + EXTENSION, "tests/test4" + EXTENSION, };
+                    "tests/test2" + EXTENSION, "tests/test3" + EXTENSION, "tests/test4" + EXTENSION };
             for (String fileName : fileNames) {
                 CharStream cs = CharStreams.fromFileName(fileName);
                 System.out.println("Interpreting file " + fileName);
