@@ -1,0 +1,9 @@
+alma geometry; 
+arrebatandoDa geometry.Rectangle; 
+igreja Principal { 
+  qualquer obraDoSenhor run() { 
+   asas rectangle = nova Rectangle(10, 5); 
+   asas area = rectangle.getArea(); 
+   pregue("Área do retângulo: " + area); 
+  } 
+} 

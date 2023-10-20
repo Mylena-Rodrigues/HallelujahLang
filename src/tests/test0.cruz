@@ -1,0 +1,11 @@
+igreja Rectangle { 
+  asas width; 
+  asas height; 
+  fundacao(width, height) { 
+    asas nestaIgreja.width = width; 
+    asas nestaIgreja.height = height; 
+  } 
+  asas obraDoSenhor getArea() { 
+    amem nestaIgreja.width * nestaIgreja.height; 
+  } 
+} 

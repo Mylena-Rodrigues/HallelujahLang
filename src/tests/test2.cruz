@@ -1,0 +1,4 @@
+igreja Main {
+ qualquer rodar = nova Principal(); 
+ rodar.run();
+}
