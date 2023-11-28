@@ -89,9 +89,9 @@ WS: [ \t\r\n]+ -> skip; // Ignore whitespace
 // Automaton Token Rules
 program:
 	{
-			List<ASTNode> body = new ArrayList<ASTNode>();
-			Map<String, Object> symbolTable = new HashMap<String, Object>();
-		} (package_declaration)? {body.add($package_declaration.node);} (
+		List<ASTNode> body = new ArrayList<ASTNode>();
+		Map<String, Object> symbolTable = new HashMap<String, Object>();
+	} (package_declaration)? {body.add($package_declaration.node);} (
 		program_body {body.add($program_body.node);}
 	)* {
 			for(ASTNode n : body) {
@@ -101,7 +101,7 @@ program:
 
 program_body
 	returns[ASTNode node]:
-	class_declaration
+	class_declaration {$node = $class_declaration.node}
 	| interface_declaration {$node = $interface_declaration.node}
 	| package_import {$node = $package_import.node}
 	| comment {$node = $comment.node};
@@ -115,26 +115,31 @@ package_import
 
 class_declaration
 	returns[ASTNode node]:
-	CLASS ID (EXTENDS ID)? (IMPLEMENTS ID (COMMA ID)*)? LBRACE class_body RBRACE;
+	CLASS ID (EXTENDS ID)? (IMPLEMENTS ID (COMMA ID)*)? LBRACE {
+			List<ASTNode> body = new ArrayList<ASTNode>();
+		} class_body {body.add($class_body.node);} RBRACE {$node = new MethodDeclaration($data_type.text, $ID.text, body);
+		};
 
 class_body
 	returns[ASTNode node]: (
-		variable_statement
-		| array_declaration
+		variable_statement {$node = $variable_statement.node;}
+		| array_declaration {$node = $print_statement.node;}
 		| print_statement {$node = $print_statement.node;}
 		| input_statement {$node = $input_statement.node;}
 		| if_statement {$node = $if_statement.node;}
 		| while_statement {$node = $while_statement.node;}
-		| class_instance
+		| class_instance {$node = $class_instance.node;}
 		| method_declaration {$node = $method_declaration.node;}
 		| method_call_class {$node = $method_call_class.node;} SEMICOLON
-		| method_call_this_class {$node = $$method_call_this_class.node;} SEMICOLON
+		| method_call_this_class {$node = $method_call_this_class.node;} SEMICOLON
 		| constructor_declaration
 		| comment {$node = $comment.node}
 	)*;
 
-class_instance:
-	data_type ID ASSIGN NEW ID LPAREN arguments RPAREN SEMICOLON;
+class_instance
+	returns[ASTNode node]:
+	ID ASSIGN NEW ID LPAREN arguments RPAREN SEMICOLON {$node = new ClassInstance($ID.text, $arguments.node);
+		};
 
 variable_declaration
 	returns[ASTNode node]:
@@ -149,6 +154,21 @@ variable_assignment
 variable_reference
 	returns[ASTNode node]:
 	ID {$node = new VariableReference($ID.text)};
+
+array_initializer
+	returns[ASTNode node]:
+	LBRACKET arguments (LBRACKET arguments RBRACKET)*? RBRACKET {$node = new ArrayDeclaration($data_type.text, $arguments.node);
+		};
+
+array_access:
+	ID LBRACKET expression RBRACKET {$node = new ArrayDeclaration($ID.text, $expression.node);
+		};
+
+array_declaration:
+	data_type array_initializer (array_initializer)? ID (
+		SEMICOLON
+		| ASSIGN ID? array_initializer SEMICOLON
+	) {$node = new ArrayDeclaration($data_type.text, $ID.text, $array_initializer.node);};
 
 variable_statement
 	returns[ASTNode node]:
@@ -181,10 +201,10 @@ statement
 	| method_call_class {$node = $method_call_class.node;} SEMICOLON
 	| print_statement {$node = $print_statement.node;}
 	| input_statement {$node = $input_statement.node;}
-	| array_access
-	| array_declaration
-	| class_instance
-	| method_call_this_class {$node = $$method_call_this_class.node;} SEMICOLON
+	| array_access {$node = $array_access.node;}
+	| array_declaration {$node = $array_declaration.node;}
+	| class_instance {$node = $class_instance.node;}
+	| method_call_this_class {$node = $method_call_this_class.node;} SEMICOLON
 	| comment {$node = $comment.node}
 	| expression {$node = $expression.node;} SEMICOLON;
 
@@ -197,9 +217,9 @@ if_statement
 	)*? (
 		ELSE {
 		List<ASTNode> elseBody = new ArrayList<ASTNode>();
-	} block {$node = $block.node;}
+	} block {$elseBody = $block.node;}
 	)? {
-		$node = new If($expression.node, body, elseBody);
+		$node = new If($expression.node, body, $elseBody);
 	};
 
 elseif_statement
@@ -207,7 +227,7 @@ elseif_statement
 	ELSEIF LPAREN expression RPAREN {
 		List<ASTNode> body = new ArrayList<ASTNode>();
 	} block {$node = $block.node;} {
-		$node = new If($expression.node, body, elseBody);
+		$node = new If($expression.node, body);
 	};
 
 while_statement
@@ -259,7 +279,7 @@ interface_declaration
 	INTERFACE ID LBRACE {
 		List<ASTNode> body = new ArrayList<ASTNode>();
 		Map<String, Object> localSymbolTable = new HashMap<String, Object>();
-	} (interface_body {body.add($interface_body.node);})* RBRACE {$node = new InterfaceDeclaration($data_type.text, $ID.text, body, localSymbolTable, $parameters.list);
+	} (interface_body {body.add($interface_body.node);})* RBRACE {$node = new InterfaceDeclaration($ID.text, body, localSymbolTable);
 		};
 
 interface_body
@@ -278,24 +298,16 @@ arguments
 		)*
 	) {$list = args;};
 
-array_initializer:
-	LBRACKET arguments (LBRACKET arguments RBRACKET)*? RBRACKET;
-
-array_access: ID LBRACKET expression RBRACKET;
-
-array_declaration:
-	data_type array_initializer (array_initializer)? ID (
-		SEMICOLON
-		| ASSIGN ID? array_initializer SEMICOLON
-	);
-
 constructor_declaration:
-	CONSTRUCTOR LPAREN arguments RPAREN LBRACE constructor_body RBRACE;
+	CONSTRUCTOR LPAREN parameters RPAREN LBRACE {
+		List<ASTNode> body = new ArrayList<ASTNode>();
+	} constructor_body {body.add($constructor_body.node);} RBRACE {$node = new ConstructorDeclaration($parameters.list, body)
+		};
 
-constructor_fields_declaration:
-	data_type THIS DOT ID ASSIGN expression SEMICOLON;
-
-constructor_body: constructor_fields_declaration*;
+constructor_body
+	returns[ASTNode node]: (
+		data_type THIS DOT ID ASSIGN expression SEMICOLON
+	)*;
 
 ARITMETICAL_OPERATORS: PLUS | MINUS | MULTIPLY | DIVIDE;
 
@@ -370,10 +382,10 @@ operand
 callings
 	returns[ASTNode node]:
 	method_call_class {$node = $method_call_class.node;}
-	| array_initializer
-	| ID array_initializer
+	| array_initializer {$node = $array_initializer.node;}
+	| ID array_initializer {$node = $array_initializer.node;}
 	| method_call {$node = $method_call.node;}
-	| method_call_this_class {$node = $$method_call_this_class.node;};
+	| method_call_this_class {$node = $method_call_this_class.node;};
 
 value
 	returns[ASTNode node]:
