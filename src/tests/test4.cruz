@@ -23,9 +23,7 @@ igreja Person {
     } 
 
     nestaIgreja.print("Alice");
-
     gloria message = nestaIgreja.print("Alice");
-
     pregue(message);
 
  

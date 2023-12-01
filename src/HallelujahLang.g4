@@ -12,7 +12,6 @@ grammar HallelujahLang;
 	Map<String, Object> symbolTable = new HashMap<String, Object>();
 }
 
-// Reserved Keywords
 CLASS: 'igreja';
 EXTENDS: 'estende';
 IMPLEMENTS: 'implementa';
@@ -44,7 +43,6 @@ STRING: 'gloria';
 VOID: 'qualquer';
 NULL: 'limbo';
 
-// Symbols
 ASSIGN: '=';
 DIVIDE: '/';
 MINUS: '-';
@@ -73,20 +71,17 @@ RPAREN: ')';
 LBRACKET: '[';
 RBRACKET: ']';
 
-//Comments
 LINE_COMMENT: '//' ~[\r\n]* -> skip;
 
 MULTILINE_COMMENT: '/*' .*? '*/' -> skip;
 
-// Other Tokens
 BOOL_CONST: BOOL_TRUE | BOOL_FALSE;
 FLOAT_CONST: [0-9]+ '.' [0-9]+;
 ID: [a-zA-Z]+;
 INT_CONST: [0-9]+;
 STRING_CONST: '"' (~["\r\n] | '\\"')* '"';
-WS: [ \t\r\n]+ -> skip; // Ignore whitespace
+WS: [ \t\r\n]+ -> skip;
 
-// Automaton Token Rules
 program:
 	{
 		List<ASTNode> body = new ArrayList<ASTNode>();
@@ -94,30 +89,32 @@ program:
 	} (package_declaration)? {body.add($package_declaration.node);} (
 		program_body {body.add($program_body.node);}
 	)* {
-			for(ASTNode n : body) {
-				n.execute(symbolTable);
-			}
-		};
+		for (ASTNode n : body) {
+			n.execute(symbolTable);
+		}
+	};
+
+package_declaration
+	returns[ASTNode node]:
+	PACKAGE ID SEMICOLON {$node = new PackageDeclaration($ID.text);};
 
 program_body
 	returns[ASTNode node]:
-	class_declaration {$node = $class_declaration.node}
-	| interface_declaration {$node = $interface_declaration.node}
-	| package_import {$node = $package_import.node}
+	class_declaration {$node = $class_declaration.node;}
+	| interface_declaration {$node = $interface_declaration.node;}
+	| package_import {$node = $package_import.node;}
 	| comment {$node = $comment.node};
-
-package_declaration:
-	PACKAGE ID SEMICOLON {$node = new PackageDeclaration($ID.text);};
 
 package_import
 	returns[ASTNode node]:
-	IMPORT ID DOT ID SEMICOLON {$node = new PackageImport($ID.text);};
+	IMPORT ID (DOT ID)? SEMICOLON {$node = new PackageImport($ID.text);};
 
 class_declaration
 	returns[ASTNode node]:
 	CLASS ID (EXTENDS ID)? (IMPLEMENTS ID (COMMA ID)*)? LBRACE {
 			List<ASTNode> body = new ArrayList<ASTNode>();
-		} class_body {body.add($class_body.node);} RBRACE {$node = new MethodDeclaration($data_type.text, $ID.text, body);
+		} class_body {body.add($class_body.node);} RBRACE {
+			$node = new ClassDeclaration($ID.text, body);
 		};
 
 class_body
@@ -138,7 +135,7 @@ class_body
 
 class_instance
 	returns[ASTNode node]:
-	ID ASSIGN NEW ID LPAREN arguments RPAREN SEMICOLON {$node = new ClassInstance($ID.text, $arguments.node);
+	ID ASSIGN NEW ID LPAREN arguments RPAREN SEMICOLON {$node = new ClassInstance($ID.text, $arguments.list);
 		};
 
 variable_declaration
@@ -157,18 +154,29 @@ variable_reference
 
 array_initializer
 	returns[ASTNode node]:
-	LBRACKET arguments (LBRACKET arguments RBRACKET)*? RBRACKET {$node = new ArrayDeclaration($data_type.text, $arguments.node);
-		};
+	LBRACKET arguments (LBRACKET arguments RBRACKET)*? RBRACKET {
+        $node = new ArrayInitializer($data_type.text, $arguments.list);
+    };
 
-array_access:
-	ID LBRACKET expression RBRACKET {$node = new ArrayDeclaration($ID.text, $expression.node);
-		};
+array_access
+	returns[ASTNode node]:
+	ID LBRACKET expression RBRACKET {
+        $node = new ArrayAccess($ID.text, $expression.node);
+    };
 
-array_declaration:
+array_declaration
+	returns[ASTNode node]:
 	data_type array_initializer (array_initializer)? ID (
 		SEMICOLON
 		| ASSIGN ID? array_initializer SEMICOLON
-	) {$node = new ArrayDeclaration($data_type.text, $ID.text, $array_initializer.node);};
+	) {
+        // Lógica para determinar se há inicialização do array e criar o ArrayDeclaration correspondente
+        if ($array_initializer.node != null) {
+            $node = new ArrayDeclaration($data_type.text, $ID.text, $array_initializer.node);
+        } else {
+            $node = new ArrayDeclaration($data_type.text, $ID.text);
+        }
+    };
 
 variable_statement
 	returns[ASTNode node]:
@@ -262,7 +270,7 @@ method_call_this_class
 
 print
 	returns[ASTNode node]:
-	PLUS expression {$node = new Print($expression.node);} (
+	expression {$node = new Print($expression.node);} (
 		PLUS expression {$node = new Print($expression.node);}
 	)*? PLUS;
 
@@ -298,7 +306,8 @@ arguments
 		)*
 	) {$list = args;};
 
-constructor_declaration:
+constructor_declaration
+	returns[ASTNode node]:
 	CONSTRUCTOR LPAREN parameters RPAREN LBRACE {
 		List<ASTNode> body = new ArrayList<ASTNode>();
 	} constructor_body {body.add($constructor_body.node);} RBRACE {$node = new ConstructorDeclaration($parameters.list, body)
@@ -309,8 +318,6 @@ constructor_body
 		data_type THIS DOT ID ASSIGN expression SEMICOLON
 	)*;
 
-ARITMETICAL_OPERATORS: PLUS | MINUS | MULTIPLY | DIVIDE;
-
 aritmetical_expression
 	returns[ASTNode node]:
 	operand {$node = $operand.node;} (
@@ -318,8 +325,6 @@ aritmetical_expression
             $node = new AritmeticalOperations($node, $right.node, $ARITMETICAL_OPERATORS.text);
         }
 	)*;
-
-EQUALITY_OPERATORS: EQUALS | NOT_EQUALS;
 
 equality_expression
 	returns[ASTNode node]:
@@ -329,18 +334,11 @@ equality_expression
         }
 	)*;
 
-COMPARISON_OPERATORS:
-	LESS_THAN
-	| GREATER_THAN
-	| LESS_EQUAL
-	| GREATER_EQUAL;
-
 comparison_expression
 	returns[ASTNode node]:
 	operand {$node = $operand.node;} (
-		COMPARISON_OPERATORS right = operand {
-            $node = new ComparisonOperations($node, $right.node, $right.text);
-        }
+		COMPARISON_OPERATORS right = operand {$node = new ComparisonOperations($node, $right.node, $COMPARISON_OPERATORS.text);
+			}
 	)*;
 
 logical_not_expression
@@ -355,7 +353,7 @@ logical_or_expression
 
 logical_and_expression
 	returns[ASTNode node]:
-	equality_expression {$node = $equalityExpression.node;} (
+	equality_expression {$node = $equality_expression.node;} (
 		AND right = equality_expression {$node = new LogicalAnd($node, $right.node);}
 	)*;
 
@@ -397,9 +395,19 @@ value
 	| BOOL_CONST {$node = new Constant(Boolean.parseBoolean($BOOL_CONST.text));}
 	| NULL {$node = null;};
 
-data_type: (INT | FLOAT | BOOLEAN | STRING | VOID);
+data_type: INT | FLOAT | BOOLEAN | STRING | VOID;
 
 comment
 	returns[ASTNode node]:
 	LINE_COMMENT {$node = $LINE_COMMENT.text;}
 	| MULTILINE_COMMENT {$node = $MULTILINE_COMMENT.text;};
+
+EQUALITY_OPERATORS: EQUALS | NOT_EQUALS;
+
+ARITMETICAL_OPERATORS: PLUS | MINUS | MULTIPLY | DIVIDE;
+
+COMPARISON_OPERATORS:
+	LESS_THAN
+	| GREATER_THAN
+	| LESS_EQUAL
+	| GREATER_EQUAL;

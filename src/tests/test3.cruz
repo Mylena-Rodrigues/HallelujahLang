@@ -2,6 +2,10 @@ feFaz Printable {
   printMessage();
 }
 
+feFaz Printable {
+  print();
+}
+
 igreja Message implementa Printable {
   qualquer obraDoSenhor printMessage(){
     pregue("Mensagem impressa!");
