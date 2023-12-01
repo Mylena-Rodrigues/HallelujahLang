@@ -1,4 +1,4 @@
-package ast;
+package com.mylanguage.hallellujah.ast;
 
 import java.util.Map;
 

@@ -1,4 +1,4 @@
-// Generated from /home/me/2.study/faculdade/hallelujahLang/src/HallelujahLang.g4 by ANTLR 4.13.1
+// Generated from HallelujahLang.g4 by ANTLR 4.13.1
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;

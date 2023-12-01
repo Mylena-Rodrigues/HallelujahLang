@@ -1,4 +1,4 @@
-// Generated from /home/me/2.study/faculdade/hallelujahLang/src/HallelujahLang.g4 by ANTLR 4.13.1
+// Generated from HallelujahLang.g4 by ANTLR 4.13.1
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -35,6 +35,18 @@ public class HallelujahLangBaseListener implements HallelujahLangListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitPackage_declaration(HallelujahLangParser.Package_declarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterProgram_body(HallelujahLangParser.Program_bodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitProgram_body(HallelujahLangParser.Program_bodyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -88,25 +100,85 @@ public class HallelujahLangBaseListener implements HallelujahLangListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterField_declaration(HallelujahLangParser.Field_declarationContext ctx) { }
+	@Override public void enterVariable_declaration(HallelujahLangParser.Variable_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitField_declaration(HallelujahLangParser.Field_declarationContext ctx) { }
+	@Override public void exitVariable_declaration(HallelujahLangParser.Variable_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMethod_declaration(HallelujahLangParser.Method_declarationContext ctx) { }
+	@Override public void enterVariable_assignment(HallelujahLangParser.Variable_assignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMethod_declaration(HallelujahLangParser.Method_declarationContext ctx) { }
+	@Override public void exitVariable_assignment(HallelujahLangParser.Variable_assignmentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterVariable_reference(HallelujahLangParser.Variable_referenceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVariable_reference(HallelujahLangParser.Variable_referenceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArray_initializer(HallelujahLangParser.Array_initializerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArray_initializer(HallelujahLangParser.Array_initializerContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArray_access(HallelujahLangParser.Array_accessContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArray_access(HallelujahLangParser.Array_accessContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArray_declaration(HallelujahLangParser.Array_declarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArray_declaration(HallelujahLangParser.Array_declarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterVariable_statement(HallelujahLangParser.Variable_statementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVariable_statement(HallelujahLangParser.Variable_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -136,18 +208,6 @@ public class HallelujahLangBaseListener implements HallelujahLangListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBlock(HallelujahLangParser.BlockContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBlock(HallelujahLangParser.BlockContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterStatement(HallelujahLangParser.StatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -160,18 +220,6 @@ public class HallelujahLangBaseListener implements HallelujahLangListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAssignment_statement(HallelujahLangParser.Assignment_statementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAssignment_statement(HallelujahLangParser.Assignment_statementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterIf_statement(HallelujahLangParser.If_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -179,18 +227,6 @@ public class HallelujahLangBaseListener implements HallelujahLangListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitIf_statement(HallelujahLangParser.If_statementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterElseif_statement(HallelujahLangParser.Elseif_statementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitElseif_statement(HallelujahLangParser.Elseif_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -220,49 +256,49 @@ public class HallelujahLangBaseListener implements HallelujahLangListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPrint(HallelujahLangParser.PrintContext ctx) { }
+	@Override public void enterMethod_declaration(HallelujahLangParser.Method_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPrint(HallelujahLangParser.PrintContext ctx) { }
+	@Override public void exitMethod_declaration(HallelujahLangParser.Method_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMethod_call_statement(HallelujahLangParser.Method_call_statementContext ctx) { }
+	@Override public void enterMethod_call(HallelujahLangParser.Method_callContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMethod_call_statement(HallelujahLangParser.Method_call_statementContext ctx) { }
+	@Override public void exitMethod_call(HallelujahLangParser.Method_callContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterClass_method_call(HallelujahLangParser.Class_method_callContext ctx) { }
+	@Override public void enterMethod_call_class(HallelujahLangParser.Method_call_classContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitClass_method_call(HallelujahLangParser.Class_method_callContext ctx) { }
+	@Override public void exitMethod_call_class(HallelujahLangParser.Method_call_classContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterThis_class_method_call(HallelujahLangParser.This_class_method_callContext ctx) { }
+	@Override public void enterMethod_call_this_class(HallelujahLangParser.Method_call_this_classContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitThis_class_method_call(HallelujahLangParser.This_class_method_callContext ctx) { }
+	@Override public void exitMethod_call_this_class(HallelujahLangParser.Method_call_this_classContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -328,6 +364,102 @@ public class HallelujahLangBaseListener implements HallelujahLangListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterConstructor_declaration(HallelujahLangParser.Constructor_declarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitConstructor_declaration(HallelujahLangParser.Constructor_declarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterConstructor_body(HallelujahLangParser.Constructor_bodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitConstructor_body(HallelujahLangParser.Constructor_bodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAritmetical_expression(HallelujahLangParser.Aritmetical_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAritmetical_expression(HallelujahLangParser.Aritmetical_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterEquality_expression(HallelujahLangParser.Equality_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEquality_expression(HallelujahLangParser.Equality_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterComparison_expression(HallelujahLangParser.Comparison_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitComparison_expression(HallelujahLangParser.Comparison_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLogical_not_expression(HallelujahLangParser.Logical_not_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLogical_not_expression(HallelujahLangParser.Logical_not_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLogical_or_expression(HallelujahLangParser.Logical_or_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLogical_or_expression(HallelujahLangParser.Logical_or_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLogical_and_expression(HallelujahLangParser.Logical_and_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLogical_and_expression(HallelujahLangParser.Logical_and_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterExpression(HallelujahLangParser.ExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -340,37 +472,49 @@ public class HallelujahLangBaseListener implements HallelujahLangListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArray_initializer(HallelujahLangParser.Array_initializerContext ctx) { }
+	@Override public void enterBinary_operation(HallelujahLangParser.Binary_operationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArray_initializer(HallelujahLangParser.Array_initializerContext ctx) { }
+	@Override public void exitBinary_operation(HallelujahLangParser.Binary_operationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArray_access(HallelujahLangParser.Array_accessContext ctx) { }
+	@Override public void enterOperand(HallelujahLangParser.OperandContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArray_access(HallelujahLangParser.Array_accessContext ctx) { }
+	@Override public void exitOperand(HallelujahLangParser.OperandContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMethod_call(HallelujahLangParser.Method_callContext ctx) { }
+	@Override public void enterCallings(HallelujahLangParser.CallingsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMethod_call(HallelujahLangParser.Method_callContext ctx) { }
+	@Override public void exitCallings(HallelujahLangParser.CallingsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterValue(HallelujahLangParser.ValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitValue(HallelujahLangParser.ValueContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -388,49 +532,13 @@ public class HallelujahLangBaseListener implements HallelujahLangListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArray_declaration(HallelujahLangParser.Array_declarationContext ctx) { }
+	@Override public void enterComment(HallelujahLangParser.CommentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArray_declaration(HallelujahLangParser.Array_declarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterConstructor_declaration(HallelujahLangParser.Constructor_declarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitConstructor_declaration(HallelujahLangParser.Constructor_declarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterConstructor_fields_declaration(HallelujahLangParser.Constructor_fields_declarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitConstructor_fields_declaration(HallelujahLangParser.Constructor_fields_declarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterConstructor_body(HallelujahLangParser.Constructor_bodyContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitConstructor_body(HallelujahLangParser.Constructor_bodyContext ctx) { }
+	@Override public void exitComment(HallelujahLangParser.CommentContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

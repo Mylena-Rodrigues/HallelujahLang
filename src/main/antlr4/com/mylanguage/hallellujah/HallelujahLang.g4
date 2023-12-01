@@ -5,7 +5,7 @@ grammar HallelujahLang;
 	import java.util.HashMap;
 	import java.util.List;
 	import java.util.ArrayList;
-	import com.mylanguage.simple.ast.*;
+	import com.mylanguage.hallellujah.ast*;
 }
 
 @parser::members {
@@ -135,7 +135,7 @@ class_body
 
 class_instance
 	returns[ASTNode node]:
-	ID ASSIGN NEW ID LPAREN arguments RPAREN SEMICOLON {$node = new ClassInstance($ID.text, $arguments.list);
+	data_type ID ASSIGN NEW ID LPAREN (arguments)? RPAREN SEMICOLON {$node = new ClassInstance($ID.text, $arguments.list);
 		};
 
 variable_declaration
@@ -154,7 +154,9 @@ variable_reference
 
 array_initializer
 	returns[ASTNode node]:
-	LBRACKET arguments (LBRACKET arguments RBRACKET)*? RBRACKET {
+	LPAREN data_type RPAREN LBRACKET arguments (
+		LBRACKET arguments RBRACKET
+	)*? RBRACKET {
         $node = new ArrayInitializer($data_type.text, $arguments.list);
     };
 
@@ -196,64 +198,58 @@ parameter
 	returns[Parameter param]:
 	data_type ID {$param = new Parameter($data_type.text, $ID.text);};
 
-block
-	returns[ASTNode node]:
-	LBRACE (sttnt = statement {body.add($sttnt.node);})* RBRACE;
-
 statement
 	returns[ASTNode node]:
-	| if_statement {$node = $if_statement.node;}
+	if_statement {$node = $if_statement.node;}
 	| while_statement {$node = $while_statement.node;}
 	| return_statement
-	| method_call {$node = $method_call.node;}
-	| method_call_class {$node = $method_call_class.node;} SEMICOLON
 	| print_statement {$node = $print_statement.node;}
 	| input_statement {$node = $input_statement.node;}
 	| array_access {$node = $array_access.node;}
 	| array_declaration {$node = $array_declaration.node;}
 	| class_instance {$node = $class_instance.node;}
-	| method_call_this_class {$node = $method_call_this_class.node;} SEMICOLON
+	| method_call {$node = $method_call.node;}
+	| method_call_class {$node = $method_call_class.node;}
+	| method_call_this_class {$node = $method_call_this_class.node;}
 	| comment {$node = $comment.node}
-	| expression {$node = $expression.node;} SEMICOLON;
+	| expression {$node = $expression.node;};
 
 if_statement
 	returns[ASTNode node]:
-	IF LPAREN expression RPAREN {
-		List<ASTNode> body = new ArrayList<ASTNode>();
-	} block {$node = $block.node;} (
-		elseif_statement {$node = $elseif_statement.node;}
-	)*? (
-		ELSE {
-		List<ASTNode> elseBody = new ArrayList<ASTNode>();
-	} block {$elseBody = $block.node;}
+	IF LPAREN expression1 = expression RPAREN LBRACE {
+        List<ASTNode> body = new ArrayList<ASTNode>();
+    } (statement1 = statement {body.add($statement1.node);})* RBRACE (
+		(
+			ELSEIF LPAREN expression2 = expression RPAREN LBRACE {
+			List<ASTNode> elseIfBody = new ArrayList<ASTNode>();
+		} (statement2 = statement {elseIfBody.add($statement2.node);})* RBRACE
+		)* ELSE LBRACE { 
+			List<ASTNode> elseBody = new ArrayList<ASTNode>();
+		} (
+			statement3 = statement {elseBody.add($statement3.node);}
+		)* RBRACE
 	)? {
-		$node = new If($expression.node, body, $elseBody);
-	};
-
-elseif_statement
-	returns[ASTNode node]:
-	ELSEIF LPAREN expression RPAREN {
-		List<ASTNode> body = new ArrayList<ASTNode>();
-	} block {$node = $block.node;} {
-		$node = new If($expression.node, body);
+		$node = new If($expression1.node, body, $expression2.node, elseIfBody, elseBody);
 	};
 
 while_statement
 	returns[ASTNode node]:
-	WHILE LPAREN expression RPAREN {
-		List<ASTNode> body = new ArrayList<ASTNode>();
-	} block {$node = $block.node;} {
-		$node = new WhileLoop($expression.node, body);
-	};
+	WHILE LPAREN expression RPAREN LBRACE {
+        List<ASTNode> body = new ArrayList<ASTNode>();
+    } (statement {body.add($statement.node);})* RBRACE {
+        $node = new WhileLoop($expression.node, body);
+    };
 
-return_statement: RETURN print SEMICOLON;
+return_statement:
+	RETURN expression
+	| aritmetical_expression SEMICOLON;
 
 method_declaration
 	returns[ASTNode node]:
-	data_type METHOD ID LPAREN parameters RPAREN {
+	data_type METHOD ID LPAREN (parameters)? RPAREN {
 		List<ASTNode> body = new ArrayList<ASTNode>();
 		Map<String, Object> localSymbolTable = new HashMap<String, Object>();
-	} block {$node = $block.node;} {$node = new MethodDeclaration($data_type.text, $ID.text, body, localSymbolTable, $parameters.list);
+	} LBRACE (statement {body.add($statement.node);})* RBRACE {$node = new MethodDeclaration($data_type.text, $ID.text, body, localSymbolTable, $parameters.list);
 		};
 
 method_call
@@ -268,15 +264,9 @@ method_call_this_class
 	returns[ASTNode node]:
 	THIS DOT ID LPAREN (arguments)? RPAREN {$node = new MethodCall($ID.text, $arguments.list)};
 
-print
-	returns[ASTNode node]:
-	expression {$node = new Print($expression.node);} (
-		PLUS expression {$node = new Print($expression.node);}
-	)*? PLUS;
-
 print_statement
 	returns[ASTNode node]:
-	PRINT LPAREN print RPAREN SEMICOLON {$node = new Print($print.node);};
+	PRINT LPAREN expression RPAREN SEMICOLON {$node = new Print($expression.node);};
 
 input_statement
 	returns[ASTNode node]:
@@ -291,12 +281,11 @@ interface_declaration
 		};
 
 interface_body
-	returns[ASTNode node]: (
-		method_declaration {$node = $method_declaration.node;}
-		| (
-			data_type method_call {$node = $method_declaration.node;} SEMICOLON
-		)
-	)*;
+	returns[ASTNode node]:
+	method_declaration {$node = $method_declaration.node;}
+	| (
+		data_type method_call {$node = $method_call.node;} SEMICOLON
+	);
 
 arguments
 	returns[List<ASTNode> list]:
