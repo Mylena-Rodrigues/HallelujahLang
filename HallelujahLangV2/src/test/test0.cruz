@@ -1,0 +1,12 @@
+alma camila;
+igreja Rectangle {
+  asas width;
+  asas height;
+  fundacao(asas width, asas height) {
+    asas nestaIgreja.width = width; 
+    asas nestaIgreja.height = height; 
+  } 
+  asas obraDoSenhor getArea(asas width, asas height) {
+    amem width * height;
+  }
+}

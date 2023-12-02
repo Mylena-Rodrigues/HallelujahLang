@@ -1,0 +1,56 @@
+igreja Person { 
+    gloria name = "Alice"; 
+    pes age = 30;
+    pes[4] numbers = [1, 2, 3, 4]; 
+    gloria[3][3] fruits = [["apple", "banana", "cherry"], ["orange", "grape", "lemon"]]; 
+    gloria[] colors = ["red", "green", "blue"]; 
+    gloria[] firstColor = colors[0]; 
+    consciencia isStudent;
+    pes x = numbers[2];
+    gloria y = fruits[0];
+
+
+    gloria obraDoSenhor print(gloria name, pes x, pes y) {
+        seDeusQuiser (x > y) {
+            pregue("x é maior que y");
+        } seDeusNaoQuiserTente (x < y) {
+            pregue("x é menor que y");
+        } seDeusNaoQuiserEntao {
+            pregue("x é igual a y");
+        }
+
+        amem "Hello, " + name + "!"; 
+    } 
+
+    nestaIgreja.print("Alice");
+    gloria message = nestaIgreja.print("Alice");
+    pregue(message);
+
+ 
+    
+    fundacao(name, age) { 
+        gloria nestaIgreja.name = name; 
+        pes nestaIgreja.age = age; 
+    } 
+    
+    gloria obraDoSenhor sayHello() { 
+        pes count = 1; 
+        enquantoDeusQuiser(count <= 5) { 
+            pregue("Contagem: " + count); 
+            count = count + 1;
+        }
+
+        amem "Hello, my name is " + name;
+    } 
+}
+
+igreja Main{
+    gloria person = nova Person("Alice", 30); 
+    gloria personOne = nova Person("Bob", 25); 
+
+    gloria hello = person.sayHello();
+    gloria helloOne = personOne.sayHello();
+    
+    pregue(hello); 
+    pregue(helloOne);    
+}
